@@ -1,0 +1,26 @@
+{
+  "name": "reliafy",
+  "displayName": "Reliafy",
+  "version": "0.1.0",
+  "description": "Reliability engineering in Claude: life data and Weibull analysis, reliability block diagrams, maintenance intervals, test plans and fleet forecasts, on your Reliafy workspace.",
+  "author": {
+    "name": "Reliafy",
+    "email": "hello@reliafy.com",
+    "url": "https://reliafy.com"
+  },
+  "homepage": "https://reliafy.com/api-docs",
+  "repository": "https://github.com/Reliafy/claude-plugin",
+  "license": "AGPL-3.0-only",
+  "keywords": [
+    "reliability",
+    "weibull",
+    "survival-analysis",
+    "rbd",
+    "maintenance",
+    "mcp"
+  ],
+  "documentationUrl": "https://reliafy.com/api-docs",
+  "supportUrl": "mailto:hello@reliafy.com",
+  "privacyPolicyUrl": "https://reliafy.com/privacy",
+  "icon": "./.claude-plugin/icon.png"
+}
