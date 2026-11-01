@@ -1,0 +1,18 @@
+{
+  "name": "reliafy",
+  "description": "Reliafy's plugin for Claude: reliability engineering on your Reliafy workspace.",
+  "owner": {
+    "name": "Reliafy",
+    "email": "hello@reliafy.com",
+    "url": "https://reliafy.com"
+  },
+  "plugins": [
+    {
+      "name": "reliafy",
+      "source": "./",
+      "description": "Life data and Weibull analysis, RBDs, maintenance intervals, test plans and fleet forecasts through Reliafy's MCP server, with skills that teach Claude the conventions.",
+      "category": "engineering",
+      "tags": ["reliability", "weibull", "rbd", "maintenance"]
+    }
+  ]
+}
