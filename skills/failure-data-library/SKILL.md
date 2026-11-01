@@ -1,6 +1,6 @@
 ---
 name: failure-data-library
-description: "Reliafy's library of published, cited failure data (NRC/INL rates, per-demand probabilities, MIL-HDBK-217F part rates): find a generic rate for a component and use it in an RBD block. Use when the user has no failure data of their own for a component."
+description: "Published, cited generic failure rates in Reliafy, for components with no data of the user's own."
 ---
 
 # Reliafy's failure data library
@@ -17,8 +17,8 @@ The reliability data library (list kind library, get kind library_record, list k
 
 ## The actions
 
-Every call is `tool(action=…, …)` (`kind=…` for get and list). `?` marks an optional argument; `guide(action='<tool>.<action>')` returns an action's full argument schema.
+Every call is `tool(action=…, args={…})` (`kind=…` for get and list), the action's arguments in `args`. `?` marks an optional argument; `guide(action='<tool>.<action>')` returns an action's full argument schema.
 
-- `list` kind=`library` (query?, source?, equipment_type?, record_kind?, page?, page_size?): Rates and per-demand probabilities by component and failure mode.
-- `get` kind=`library_record` (id, environment?): One record in full: citation, licence, the block model to use.
-- `list` kind=`library_sources` (): The sources, their licences and contents.
+- `list(kind='library', args={query?, source?, equipment_type?, record_kind?, page?=1, page_size?=25})`: Rates and per-demand probabilities by component and failure mode.
+- `get(kind='library_record', args={id, environment?})`: One record in full: citation, licence, the block model to use.
+- `list(kind='library_sources', args={})`: The sources, their licences and contents.

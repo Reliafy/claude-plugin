@@ -1,6 +1,6 @@
 ---
 name: maintenance-strategy
-description: "Maintenance strategy calculators in Reliafy: cost-optimal age replacement, replacement over a shutdown calendar, the next replacement for a unit in service, proof-test (failure-finding) intervals and overhaul intervals, with shape uncertainty. Use when the user asks when to replace, test or overhaul something."
+description: "When to replace, test or overhaul with Reliafy: age replacement, shut calendars, proof-test and overhaul intervals."
 ---
 
 # Maintenance strategy in Reliafy
@@ -15,10 +15,10 @@ description: "Maintenance strategy calculators in Reliafy: cost-optimal age repl
 
 ## The actions
 
-Every call is `tool(action=…, …)` (`kind=…` for get and list). `?` marks an optional argument; `guide(action='<tool>.<action>')` returns an action's full argument schema.
+Every call is `tool(action=…, args={…})` (`kind=…` for get and list), the action's arguments in `args`. `?` marks an optional argument; `guide(action='<tool>.<action>')` returns an action's full argument schema.
 
-- `analyse` action=`optimal_replacement` (planned_cost, unplanned_cost, model_id?, distribution_id?, params?, unit?, include_curve?): The cost-optimal age-replacement interval for a component with a known life model; beneficial=false means run to failure is cheaper.
-- `analyse` action=`calendar_replacement` (shuts, failure_cost, unit?, model_id?, distribution_id?, params?, anytime_cost?, today?, max_age?, method?, include_schedule?, wait_seconds?): The long-run best replacement rule over a calendar of shuts (today = time 0): the threshold age at each shut, the cost against running to failure and plain age replacement, and the next 12 months by date.
-- `analyse` action=`next_replacement` (age, shuts, failure_cost, unit?, model_id?, distribution_id?, params?, anytime_cost?, now_cost?, today?, max_age?): For one unit in service on a shut calendar: replace it now, at the next shut, between shuts or run it to failure, each choice's cost and the age from which replacing now pays.
-- `analyse` action=`failure_finding_interval` (target_availability, model_id?, distribution_id?, params?, unit?): The proof-test interval keeping a hidden protective function (relief valve, trip, standby unit) at a target availability.
-- `analyse` action=`optimal_overhaul` (model_id, cost_repair, cost_overhaul, t_max?, include_curve?): The optimal overhaul interval of a repairable system (minimal repair between overhauls) from a saved minimal-repair recurrent model; only a deteriorating system (β > 1) has one.
+- `analyse(action='optimal_replacement', args={planned_cost, unplanned_cost, model_id?, distribution_id?, params?, unit?, include_curve?})`: The cost-optimal age-replacement interval for a component with a known life model; beneficial=false means run to failure is cheaper.
+- `analyse(action='calendar_replacement', args={shuts, failure_cost, unit?, model_id?, distribution_id?, params?, anytime_cost?, today?, max_age?, method?=dp, include_schedule?, wait_seconds?=20})`: The long-run best replacement rule over a calendar of shuts (today = time 0): the threshold age at each shut, the cost against running to failure and plain age replacement, and the next 12 months by date.
+- `analyse(action='next_replacement', args={age, shuts, failure_cost, unit?, model_id?, distribution_id?, params?, anytime_cost?, now_cost?, today?, max_age?})`: For one unit in service on a shut calendar: replace it now, at the next shut, between shuts or run it to failure, each choice's cost and the age from which replacing now pays.
+- `analyse(action='failure_finding_interval', args={target_availability, model_id?, distribution_id?, params?, unit?})`: The proof-test interval keeping a hidden protective function (relief valve, trip, standby unit) at a target availability.
+- `analyse(action='optimal_overhaul', args={model_id, cost_repair, cost_overhaul, t_max?, include_curve?})`: The optimal overhaul interval of a repairable system (minimal repair between overhauls) from a saved minimal-repair recurrent model; only a deteriorating system (β > 1) has one.

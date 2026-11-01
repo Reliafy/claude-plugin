@@ -1,6 +1,6 @@
 ---
 name: workspace
-description: "Read, tidy and delete saved Reliafy items (models, datasets, RBDs), see what changed in the workspace, and report a problem with the tools. Use for listing, renaming or deleting items and for workspace summaries."
+description: "Read, tidy and delete saved Reliafy items, see what changed, report a problem with the tools."
 ---
 
 # The Reliafy workspace
@@ -15,20 +15,20 @@ description: "Read, tidy and delete saved Reliafy items (models, datasets, RBDs)
 
 ## The actions
 
-Every call is `tool(action=…, …)` (`kind=…` for get and list). `?` marks an optional argument; `guide(action='<tool>.<action>')` returns an action's full argument schema.
+Every call is `tool(action=…, args={…})` (`kind=…` for get and list), the action's arguments in `args`. `?` marks an optional argument; `guide(action='<tool>.<action>')` returns an action's full argument schema.
 
-- `list` kind=`models` (model_type?): Saved models: id, name, kind, distribution, fitted params, time unit (model_type: life or recurrent).
-- `list` kind=`datasets` (): Saved datasets with their columns and row counts (and their measurements, where added).
-- `list` kind=`rbds` (): Saved reliability block diagrams: id, name, repairable or not, unit and block count.
-- `list` kind=`workspace_changes` (since?, days?): What changed in the user's workspace over a period (days, or since a date or the last visit), computed from what Reliafy stores, never estimated: new and changed items, refits whose B10 or MTTF moved, fleet forecasts that moved and alerts that fired (Pro), simulations that moved.
-- `get` kind=`model` (id): A saved model in full, life or recurrent.
-- `get` kind=`dataset` (id, offset?, limit?, part?): A dataset's name, notes, columns with types, row_count and a page of rows (offset, limit; part for its measurements); next_offset pages on.
-- `get` kind=`rbd` (id): A diagram's structure in the compact node form change rbd_create takes (nodes with their models, edges, unit), with the blocks still on placeholder models.
-- `change` action=`model_update` (model_id, name?, notes?): Rename one of the user's own models (life or recurrent) or set its notes; never the fit or data, never a sample.
-- `change` action=`model_delete` (model_id): Permanently delete one of the user's own models (life, recurrent, ALT or degradation).
-- `change` action=`dataset_update` (dataset_id, name?, notes?): Rename one of the user's own datasets or set its notes; never the data, never a sample.
-- `change` action=`dataset_delete` (dataset_id): Permanently delete one of the user's own datasets.
-- `change` action=`dataset_remove_measurements` (dataset_id): Take the measurements off a dataset (its life data stays); refused while a model reads them.
-- `change` action=`rbd_delete` (rbd_id): Permanently delete one of the user's own diagrams (with any saved result).
-- `report_problem` action=`report` (kind, summary, tool?, report_action?, trying?, expected?, happened?, detail?): File a report when a tool got in your way; returns its report_id.
-- `report_problem` action=`status` (report_id?): A report you filed (or your latest): new, acknowledged, fixed (fixed_in: the release), wont_fix or duplicate.
+- `list(kind='models', args={model_type?=all})`: Saved models: id, name, kind, distribution, fitted params, time unit (model_type: life or recurrent).
+- `list(kind='datasets', args={})`: Saved datasets with their columns and row counts (and their measurements, where added).
+- `list(kind='rbds', args={})`: Saved reliability block diagrams: id, name, repairable or not, unit and block count.
+- `list(kind='workspace_changes', args={since?, days?})`: What changed in the user's workspace over a period (days, or since a date or the last visit), computed from what Reliafy stores, never estimated: new and changed items, refits whose B10 or MTTF moved, fleet forecasts that moved and alerts that fired (Pro), simulations that moved.
+- `get(kind='model', args={id})`: A saved model in full, life or recurrent.
+- `get(kind='dataset', args={id, offset?=0, limit?=50, part?})`: A dataset's name, notes, columns with types, row_count and a page of rows (offset, limit; part for its measurements); next_offset pages on.
+- `get(kind='rbd', args={id})`: A diagram's structure in the compact node form change rbd_create takes (nodes with their models, edges, unit), with the blocks still on placeholder models.
+- `change(action='model_update', args={model_id, name?, notes?})`: Rename one of the user's own models (life or recurrent) or set its notes; never the fit or data, never a sample.
+- `change(action='model_delete', args={model_id})`: Permanently delete one of the user's own models (life, recurrent, ALT or degradation).
+- `change(action='dataset_update', args={dataset_id, name?, notes?})`: Rename one of the user's own datasets or set its notes; never the data, never a sample.
+- `change(action='dataset_delete', args={dataset_id})`: Permanently delete one of the user's own datasets.
+- `change(action='dataset_remove_measurements', args={dataset_id})`: Take the measurements off a dataset (its life data stays); refused while a model reads them.
+- `change(action='rbd_delete', args={rbd_id})`: Permanently delete one of the user's own diagrams (with any saved result).
+- `report_problem(action='report', args={kind, summary, tool?, report_action?, trying?, expected?, happened?, detail?})`: File a report when a tool got in your way; returns its report_id.
+- `report_problem(action='status', args={report_id?})`: A report you filed (or your latest): new, acknowledged, fixed (fixed_in: the release), wont_fix or duplicate.

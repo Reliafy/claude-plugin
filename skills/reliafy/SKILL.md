@@ -1,6 +1,6 @@
 ---
 name: reliafy
-description: "Use whenever you work with Reliafy or call its MCP tools (get, list, analyse, change, guide, report_problem): reliability engineering on the user's Reliafy workspace, such as life data and Weibull fits, RBDs, maintenance intervals, test plans and fleets. Holds the conventions every call must follow: censoring flags, time units, parameter names, redundancy, confidence bounds and untrusted workspace text."
+description: "Conventions for every Reliafy MCP call (get, list, analyse, change, guide, report_problem): censoring flags, time units, parameter names, redundancy, bounds, untrusted workspace text."
 ---
 
 # Working with Reliafy
@@ -9,26 +9,29 @@ Reliafy is a reliability-engineering workspace built on the open-source SurPyval
 libraries. Its MCP server (https://reliafy.com/mcp) acts on the signed-in user's own data plus a shared,
 read-only sample library.
 
-## The six tools
+## The tools
+
+Every call is `tool(action=…, args={…})` (`kind=…` for `get` and `list`), with the action's arguments
+in `args`. Each tool's description lists its actions and what each needs. Before an action you haven't
+used here, or one with nested arguments (RBD nodes and ops, shut calendars, covariates), read
+`guide(action='<tool>.<action>')`. A refused call names what's missing and where its schema is.
 
 | Tool | What it does |
 |---|---|
-| `get` (kind, id) | One saved item in full: model, dataset, rbd, rbd_run, job, upload, library_record; also `account` (plan, calls left) and `upgrade_link`. |
-| `list` (kind) | The user's items of one kind (models, datasets, rbds, rbd_runs, fleets, fleet_alerts, share_links), `workspace_changes`, and the failure-data `library`. |
-| `analyse` (action) | Every calculation, saving nothing: fits, reliability at times, requirements, test plans, repairable systems, replacement / proof-test / overhaul intervals, fleet forecasts, RBD analyses (`rbd`, `rbd_sensitivity`, ...). |
+| `get` (kind) | One saved item in full: model, dataset, rbd, rbd_run, job, upload, library_record; also `account` (plan, calls left) and `upgrade_link`. |
+| `list` (kind) | The user's items of one kind (models, datasets, rbds, rbd_runs, fleets, fleet_alerts, share_links), `workspace_changes`, the failure-data `library` and `library_sources`. |
+| `analyse` (action) | Every calculation, saving nothing: fits, reliability at times, requirements, test plans, repairable systems, intervals, fleet forecasts, RBD analyses (`rbd`, `rbd_*`). |
 | `change` (action) | Every write: `model_*`, `dataset_*`, `rbd_*`, `upload_create`, `import_rbd`, `import_excel`, `share_*`, `fleet_create_alert`. |
-| `guide` (topic, action) | The how-tos by topic, and `guide(action='analyse.fit')` for one action's full argument schema. |
+| `guide` (topic, action) | How-tos by topic; `guide(action='analyse.fit')` gives one action's arguments. |
 | `report_problem` (action) | Tell Reliafy's developers when a tool got in your way; `status` says later whether it's fixed. |
 
-Each tool's description lists its actions with their arguments (`?` = optional). Before building a call
-with nested arguments you haven't used yet (RBD nodes and ops, shut calendars, covariates), read
-`guide(action='<tool>.<action>')`. The other skills in this plugin cover each area; clients without skills
-can read the same text with `guide(topic=...)`.
+The other skills in this plugin cover each area. Clients without skills read the same text with
+`guide(topic=...)`.
 
 ## Conventions: follow them exactly
 
 - **Censoring**: 0 = the unit FAILED at that time, 1 = it was still running (right-censored, a
-  suspension); -1 = left-censored (found failed at that time, failed at some unknown earlier time);
+  suspension), -1 = left-censored (found failed at that time, failed at some unknown earlier time),
   2 = interval-censored (failed between two times: the upper bound goes in `data_right` /
   `time_right_column`). Delayed entry (units in service before records began) is truncation
   (`trunc_left` / `trunc_left_column`), not a flag. Spreadsheets are often the other way round
@@ -36,11 +39,11 @@ can read the same text with `guide(topic=...)`.
   censored almost always means the column is inverted.
 - **Units**: parameters and times are in the model's (or diagram's) time unit. Always state the unit;
   ask if unsure. Never assume hours.
-- **Params** are lists of `{name, value}` using SurPyval names: weibull [alpha (scale), beta (shape)],
+- **Params** are lists of `{name, value}` with SurPyval's names: weibull [alpha (scale), beta (shape)],
   exponential [failure_rate], normal / lognormal [mu, sigma], gamma [alpha, beta].
-- **RBDs**: redundancy must be modelled as redundancy (parallel, k-of-n, standby). Never wire A/B,
-  duplex or standby items in series. Never silently invent failure data: ask for MTBFs, or mark guessed
-  values `placeholder=true` and say so.
+- **RBDs**: redundancy is modelled as redundancy (parallel, k-of-n, standby). Never wire A/B, duplex or
+  standby items in series. Never silently invent failure data: ask for MTBFs, or mark guessed values
+  `placeholder=true` and say so.
 - **Bounds**: quote confidence bounds with the point values. Where a result has none (null, with a note
   saying why), never invent them. Relay the warnings and notes a result asks you to.
 - **Links**: every saved item has a `url`; give it to the user so they can open the result in Reliafy.

@@ -1,6 +1,6 @@
 ---
 name: uploads
-description: "Send files into Reliafy and import them: the single-use upload link and its fallbacks, inspecting workbooks, importing BlockSim / Open-PSA / Galileo / RePyability diagrams, Excel sheets, datasets and outage logs. Use whenever the user has a file to bring in."
+description: "Bring files into Reliafy: the upload link and its fallbacks, then import diagrams, workbooks, datasets and outage logs."
 ---
 
 # Files into Reliafy
@@ -15,12 +15,12 @@ Relay the import notes: they say what was approximated. Blocks imported without 
 
 ## The actions
 
-Every call is `tool(action=…, …)` (`kind=…` for get and list). `?` marks an optional argument; `guide(action='<tool>.<action>')` returns an action's full argument schema.
+Every call is `tool(action=…, args={…})` (`kind=…` for get and list), the action's arguments in `args`. `?` marks an optional argument; `guide(action='<tool>.<action>')` returns an action's full argument schema.
 
-- `change` action=`upload_create` (purpose, filename, size_bytes?): A single-use link (15 minutes) to send a file without pasting it: run the returned curl PUT from a shell that can read the file, then import with upload_id.
-- `change` action=`upload_send_part` (upload_id, part_index, data_base64, last, sha256?): Send a file into an upload through this connection, in base64 parts, when the PUT (and url_fallback) can't get through.
-- `change` action=`import_rbd` (upload_id?, content?, format?, name?, save?, only?, time_unit?): Import diagrams from a BlockSim, Open-PSA, Galileo, RePyability JSON or Reliafy Excel template file (upload_id), or small pasted text (content, at most 200 KB), saving each as an RBD (all or nothing against the plan's limit).
-- `change` action=`import_excel` (upload_id, target, sheet?, mapping?, name?, rbd_id?, replace?, header_row?): Import an uploaded .xlsx: a sheet as a dataset, or Reliafy's RBD template as a diagram (rbd_id: a new copy of it; replace=true: over it).
-- `change` action=`dataset_upload` (name, csv?, upload_id?, sheet?, no_header?): Save a dataset from CSV text (csv) or a file sent with change upload_create (upload_id; an .xlsx needs sheet); returns its id, columns and a preview.
-- `change` action=`rbd_upload_outage_log` (rbd_id, csv?, columns?, unit?, window_start?, window_end?, date_order?, asset_map?, name?, upload_id?, sheet?): Save a real outage log (asset, start, end; blank end = still down) against one of the user's diagrams, as CSV text or an uploaded file, and return the system's observed history from it (as analyse rbd_system_history).
-- `get` kind=`upload` (id): An uploaded file before importing it: a workbook's sheets with header rows, columns, row counts, sample rows and a guessed mapping (looks_like); a diagram file's diagrams and block counts; a CSV's columns.
+- `change(action='upload_create', args={purpose, filename, size_bytes?})`: A single-use link (15 minutes) to send a file without pasting it: run the returned curl PUT from a shell that can read the file, then import with upload_id.
+- `change(action='upload_send_part', args={upload_id, part_index, data_base64, last, sha256?})`: Send a file into an upload through this connection, in base64 parts, when the PUT (and url_fallback) can't get through.
+- `change(action='import_rbd', args={upload_id?, content?, format?, name?, save?=true, only?, time_unit?})`: Import diagrams from a BlockSim, Open-PSA, Galileo, RePyability JSON or Reliafy Excel template file (upload_id), or small pasted text (content, at most 200 KB), saving each as an RBD (all or nothing against the plan's limit).
+- `change(action='import_excel', args={upload_id, target, sheet?, mapping?, name?, rbd_id?, replace?, dry_run?, header_row?})`: Import an uploaded .xlsx: a sheet as a dataset, or Reliafy's RBD template as a diagram (rbd_id: a new copy of it; replace=true: over it).
+- `change(action='dataset_upload', args={name, csv?, upload_id?, sheet?, no_header?})`: Save a dataset from CSV text (csv) or a file sent with change upload_create (upload_id; an .xlsx needs sheet); returns its id, columns and a preview.
+- `change(action='rbd_upload_outage_log', args={rbd_id, csv?, columns?, unit?, window_start?, window_end?, date_order?=auto, asset_map?, name?, upload_id?, sheet?})`: Save a real outage log (asset, start, end; blank end = still down) against one of the user's diagrams, as CSV text or an uploaded file, and return the system's observed history from it (as analyse rbd_system_history).
+- `get(kind='upload', args={id})`: An uploaded file before importing it: a workbook's sheets with header rows, columns, row counts, sample rows and a guessed mapping (looks_like); a diagram file's diagrams and block counts; a CSV's columns.

@@ -1,6 +1,6 @@
 ---
 name: test-planning
-description: "Plan reliability tests with Reliafy: demonstration (success-run, MTBF), sequential, life-test precision, accelerated test plans and before/after comparisons (sample size, power). Use when the user asks how many units or how long to test."
+description: "Plan reliability tests in Reliafy: demonstration, sequential, life-test precision, accelerated test plans, before/after comparisons."
 ---
 
 # Test planning in Reliafy
@@ -14,10 +14,10 @@ Test planning: every plan is exact or numerical and saves nothing (analyse actio
 
 ## The actions
 
-Every call is `tool(action=…, …)` (`kind=…` for get and list). `?` marks an optional argument; `guide(action='<tool>.<action>')` returns an action's full argument schema.
+Every call is `tool(action=…, args={…})` (`kind=…` for get and list), the action's arguments in `args`. `?` marks an optional argument; `guide(action='<tool>.<action>')` returns an action's full argument schema.
 
-- `analyse` action=`plan_demonstration_test` (reliability?, confidence?, mission_time?, failures?, test_multiple?, shape?, units?, method?, mtbf?, design_reliability?, unit?, design_mtbf?, producer_risk?, b_life?, shape_model_id?, shape_bound?): Plan a reliability demonstration test: units, test time per unit and failures allowed to show reliability R over a mission at confidence C (success run / binomial; with a known Weibull shape, test longer with fewer units; or an MTBF test).
-- `analyse` action=`plan_sequential_test` (method?, mtbf?, reliability?, design_mtbf?, design_reliability?, confidence?, producer_risk?, unit?, failures_seen?, time_seen?, units_seen?): A truncated sequential test of an MTBF or a reliability against a good design: accept/reject lines, both risks as run, average length against the fixed-length test; with failures_seen, accept, reject or continue.
-- `analyse` action=`plan_life_test` (params, distribution?, solve_for?, units?, within_pct?, test_end?, censor_time?, failure_fraction?, quantity?, b_life?, confidence?, unit?): How precisely a life test estimates a B-life or the mean from planning values, or the units or test length for a precision.
-- `analyse` action=`plan_accelerated_test` (life_params, shape, use_stress, censor_time, life_model?, distribution?, high_stress?, units?, levels?, stresses?, units_at?, b_life?, confidence?, unit?): An accelerated life test plan from planning values: stresses, units at each, expected failures and the B-life's precision at the use stress (or the precision of your own test).
-- `analyse` action=`plan_comparison` (kind, solve_for, hazard_ratio?, event_probability?, units_per_group?, failures_before?, exposure_before?, exposure_after?, rate_ratio?, power?, confidence?, one_sided?, unit?): Did the change work?
+- `analyse(action='plan_demonstration_test', args={reliability?, confidence?=0.95, mission_time?, failures?=0, test_multiple?=1.0, shape?, units?, method?=attribute, mtbf?, design_reliability?, unit?, design_mtbf?, producer_risk?, b_life?, shape_model_id?, shape_bound?=estimate})`: Plan a reliability demonstration test: units, test time per unit and failures allowed to show reliability R over a mission at confidence C (success run / binomial; with a known Weibull shape, test longer with fewer units; or an MTBF test).
+- `analyse(action='plan_sequential_test', args={method?=mtbf, mtbf?, reliability?, design_mtbf?, design_reliability?, confidence?=0.9, producer_risk?=0.1, unit?, failures_seen?, time_seen?, units_seen?})`: A truncated sequential test of an MTBF or a reliability against a good design: accept/reject lines, both risks as run, average length against the fixed-length test; with failures_seen, accept, reject or continue.
+- `analyse(action='plan_life_test', args={params, distribution?=weibull, solve_for?=precision, units?, within_pct?, test_end?=time, censor_time?, failure_fraction?, quantity?=b_life, b_life?=10, confidence?=0.9, unit?})`: How precisely a life test estimates a B-life or the mean from planning values, or the units or test length for a precision.
+- `analyse(action='plan_accelerated_test', args={life_params, shape, use_stress, censor_time, life_model?=arrhenius, distribution?=weibull, high_stress?, units?, levels?=2, stresses?, units_at?, b_life?=10, confidence?=0.9, unit?})`: An accelerated life test plan from planning values: stresses, units at each, expected failures and the B-life's precision at the use stress (or the precision of your own test).
+- `analyse(action='plan_comparison', args={kind, solve_for, hazard_ratio?, event_probability?, units_per_group?, failures_before?, exposure_before?, exposure_after?, rate_ratio?, power?=0.8, confidence?=0.95, one_sided?, unit?})`: Did the change work?

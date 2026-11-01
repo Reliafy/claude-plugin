@@ -1,6 +1,6 @@
 ---
 name: rbd-building
-description: "Build and edit reliability block diagrams (RBDs) in Reliafy: structure rules for series, parallel, k-of-n and standby redundancy, block models, repairable diagrams, edits as op batches, outage logs. Use before creating or changing any RBD."
+description: "Build and edit reliability block diagrams in Reliafy: series, parallel, k-of-n and standby redundancy, block models, repairable diagrams."
 ---
 
 # Building RBDs in Reliafy
@@ -17,12 +17,12 @@ description: "Build and edit reliability block diagrams (RBDs) in Reliafy: struc
 
 ## The actions
 
-Every call is `tool(action=…, …)` (`kind=…` for get and list). `?` marks an optional argument; `guide(action='<tool>.<action>')` returns an action's full argument schema.
+Every call is `tool(action=…, args={…})` (`kind=…` for get and list), the action's arguments in `args`. `?` marks an optional argument; `guide(action='<tool>.<action>')` returns an action's full argument schema.
 
-- `change` action=`rbd_create` (name, unit?, repairable?, nodes?, edges?, stages?, include_graph?, repair_crews?, maintenance_groups?, safety_function?, target_sil?, costs?, production?, phases?, network?): Build, validate and save a diagram: the graph form (nodes + edges, one input and one output node) or the simple stages form (stages in series, components in parallel within each).
-- `change` action=`rbd_clone` (rbd_id, name?): Copy a diagram (a shared sample or the user's own) to a new one in the user's workspace, to edit (samples are read-only).
-- `change` action=`rbd_edit` (rbd_id, ops, if_updated_at?, dry_run?, include_graph?): Change a saved diagram with a batch of ops, all or nothing (a failed op is named: ops[i]).
-- `change` action=`rbd_delete` (rbd_id): Permanently delete one of the user's own diagrams (with any saved result).
-- `change` action=`rbd_upload_outage_log` (rbd_id, csv?, columns?, unit?, window_start?, window_end?, date_order?, asset_map?, name?, upload_id?, sheet?): Save a real outage log (asset, start, end; blank end = still down) against one of the user's diagrams, as CSV text or an uploaded file, and return the system's observed history from it (as analyse rbd_system_history).
-- `get` kind=`rbd` (id): A diagram's structure in the compact node form change rbd_create takes (nodes with their models, edges, unit), with the blocks still on placeholder models.
-- `list` kind=`rbds` (): Saved reliability block diagrams: id, name, repairable or not, unit and block count.
+- `change(action='rbd_create', args={name, unit?=Hours, repairable?, nodes?, edges?, stages?, include_graph?, repair_crews?, maintenance_groups?, safety_function?, target_sil?, costs?, production?, phases?, network?})`: Build, validate and save a diagram: the graph form (nodes + edges, one input and one output node) or the simple stages form (stages in series, components in parallel within each).
+- `change(action='rbd_clone', args={rbd_id, name?})`: Copy a diagram (a shared sample or the user's own) to a new one in the user's workspace, to edit (samples are read-only).
+- `change(action='rbd_edit', args={rbd_id, ops, if_updated_at?, dry_run?, include_graph?})`: Change a saved diagram with a batch of ops, all or nothing (a failed op is named: ops[i]).
+- `change(action='rbd_delete', args={rbd_id})`: Permanently delete one of the user's own diagrams (with any saved result).
+- `change(action='rbd_upload_outage_log', args={rbd_id, csv?, columns?, unit?, window_start?, window_end?, date_order?=auto, asset_map?, name?, upload_id?, sheet?})`: Save a real outage log (asset, start, end; blank end = still down) against one of the user's diagrams, as CSV text or an uploaded file, and return the system's observed history from it (as analyse rbd_system_history).
+- `get(kind='rbd', args={id})`: A diagram's structure in the compact node form change rbd_create takes (nodes with their models, edges, unit), with the blocks still on placeholder models.
+- `list(kind='rbds', args={})`: Saved reliability block diagrams: id, name, repairable or not, unit and block count.

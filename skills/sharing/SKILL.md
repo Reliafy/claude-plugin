@@ -1,6 +1,6 @@
 ---
 name: sharing
-description: "Share Reliafy items as read-only pages anyone with the URL can open, build multi-item reports, list and revoke links. Use only when the user asks to share or publish something."
+description: "Share Reliafy items as read-only links or reports, list and revoke them. Only when the user asks."
 ---
 
 # Sharing from Reliafy
@@ -11,9 +11,9 @@ description: "Share Reliafy items as read-only pages anyone with the URL can ope
 
 ## The actions
 
-Every call is `tool(action=…, …)` (`kind=…` for get and list). `?` marks an optional argument; `guide(action='<tool>.<action>')` returns an action's full argument schema.
+Every call is `tool(action=…, args={…})` (`kind=…` for get and list), the action's arguments in `args`. `?` marks an optional argument; `guide(action='<tool>.<action>')` returns an action's full argument schema.
 
-- `change` action=`share_link` (kind, id, password?, expires_in_days?, label?): Publish a read-only page of one of the user's own items that anyone with the URL can open, no account needed; each call makes a new link.
-- `change` action=`share_report` (title, items, author?, introduction?, password?, expires_in_days?, label?): Several of the user's items on one print-ready share page: a title, author line, introduction and a note per item, each item as its share page shows it.
-- `change` action=`share_revoke` (token): Revoke a share link (by token or URL): it stops working at once.
-- `list` kind=`share_links` (item_kind?, item_id?): The user's live share links, newest first, optionally for one kind (item_kind) or item (item_id): URL, item, label, protected, expiry.
+- `change(action='share_link', args={kind, id, password?, expires_in_days?, label?})`: Publish a read-only page of one of the user's own items that anyone with the URL can open, no account needed; each call makes a new link.
+- `change(action='share_report', args={title, items, author?, introduction?, password?, expires_in_days?, label?})`: Several of the user's items on one print-ready share page: a title, author line, introduction and a note per item, each item as its share page shows it.
+- `change(action='share_revoke', args={token})`: Revoke a share link (by token or URL): it stops working at once.
+- `list(kind='share_links', args={item_kind?, item_id?})`: The user's live share links, newest first, optionally for one kind (item_kind) or item (item_id): URL, item, label, protected, expiry.

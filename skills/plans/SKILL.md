@@ -1,6 +1,6 @@
 ---
 name: plans
-description: "Reliafy plans and limits for AI agents (Free vs Pro), what to do when a tool says a limit or the plan stops it, and the upgrade link. Use when a Reliafy tool refuses a call for plan or quota reasons, or the user asks about pricing."
+description: "Reliafy plans for AI agents (Free vs Pro): what to do when a call is refused for the plan or a limit."
 ---
 
 # Reliafy plans and limits
@@ -13,7 +13,7 @@ description: "Reliafy plans and limits for AI agents (Free vs Pro), what to do w
 
 ## The actions
 
-Every call is `tool(action=…, …)` (`kind=…` for get and list). `?` marks an optional argument; `guide(action='<tool>.<action>')` returns an action's full argument schema.
+Every call is `tool(action=…, args={…})` (`kind=…` for get and list), the action's arguments in `args`. `?` marks an optional argument; `guide(action='<tool>.<action>')` returns an action's full argument schema.
 
-- `get` kind=`account` (): The plan and what's left: on Free the tool calls used and left this month and when they reset (Pro: unlimited); storage per kind against the plan's limits; whether simulation is included; how to upgrade.
-- `get` kind=`upgrade_link` (plan?): A link the user opens to subscribe to Reliafy Pro on Stripe's checkout page.
+- `get(kind='account', args={})`: The plan and what's left: on Free the tool calls used and left this month and when they reset (Pro: unlimited); storage per kind against the plan's limits; whether simulation is included; how to upgrade.
+- `get(kind='upgrade_link', args={plan?=pro})`: A link the user opens to subscribe to Reliafy Pro on Stripe's checkout page.
